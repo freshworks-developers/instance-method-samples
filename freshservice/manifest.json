@@ -1,0 +1,17 @@
+{
+  "platform-version": "2.2",
+  "product": {
+    "freshservice": {
+      "location": {
+        "ticket_sidebar": {
+          "url": "template.html",
+          "icon": "icon.svg"
+        }
+      }
+    }
+  },
+  "engines": {
+    "node": "12.22.6",
+    "fdk": "7.0.1"
+  }
+}
