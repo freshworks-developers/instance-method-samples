@@ -1,13 +1,13 @@
 <html>
-  <script src="https://static.freshcloud.io/fdk/2.0/assets/fresh_client.js"></script>
+  <script src="{{{appclient}}}"></script>
   <script src="app.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script async type="module" src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.esm.js"></script>
+  <script async nomodule src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.js"></script>
   <body>
     <div class="container">
-      <h5>Instance API demo </h5>
-      <button class='btn btn-default btn-xs' onclick="showModal()">show modal</button>
-      <button class='btn btn-default btn-xs' onclick="showDialog()">show Dialog</button>
+      <h4>Instance API demo</h4>
+      <fw-button onclick="showModal()">Show modal</fw-button>
+      <fw-button onclick="showDialog()">Show dialog</fw-button>
     </div>
   </body>
 </html>
