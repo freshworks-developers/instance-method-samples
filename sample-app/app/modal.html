@@ -1,0 +1,47 @@
+<html>
+<script src="{{{appclient}}}"></script>
+<script async type="module"
+  src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.esm.js"></script>
+<script async nomodule src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.js"></script>
+
+<body>
+  <div id="static-form-container">
+    <fw-form id="fw-static-form">
+      <fw-form-control type="TEXT" name="first_name" placeholder="First Name" required label="First Name"
+        id="first_name"></fw-form-control>
+      <fw-form-control type="TEXT" name="last_name" placeholder="Last Name" required label="Last Name"
+        id="last_name"></fw-form-control>
+      <fw-textarea rows=5 label="Message" name="message" required></fw-textarea>
+    </fw-form>
+    <fw-button id="submit-static-form">Submit</fw-button>
+    <fw-button id="reset-static-form">Reset</fw-button>
+  </div>
+
+  <script type="application/javascript">
+    var formStatic = document.querySelector("#fw-static-form")
+    document.querySelector('#submit-static-form').addEventListener('click', async (e) => {
+      const { values } = await formStatic.doSubmit(e);
+      console.log({ values });
+      window.frsh_init().then(function (client) {
+
+        client.instance.resize({ height: "500px" });
+
+        // Send message to parent
+        client.instance.send({ message: values });
+
+        // Close the instance
+        client.instance.close();
+      });
+
+      // To prevent from reloading after form submit
+      event.preventDefault();
+
+    });
+    document.querySelector('#reset-static-form').addEventListener('click', (e) => {
+      formStatic.doReset(e);
+    });
+
+  </script>
+</body>
+
+</html>
