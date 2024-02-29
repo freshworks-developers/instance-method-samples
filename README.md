@@ -1,6 +1,6 @@
 ## Instance method sample app
 
-This sample app demonstrates [instance method](https://developers-dev.freshworks.com/docs/app-sdk/v3.0/support_ticket/advanced-interfaces/instance-method/) on Platform version 3.0 in different modules using the instance methods - `client.instance.resize()`, `client.instance.close()`, `client.instance.context()`, `client.instance.send()`, `client.instance.receive()`, `client.instance.get()`.
+This sample app demonstrates [instance method](https://freshworks.dev/docs/app-sdk/v3.0/support_ticket/advanced-interfaces/instance-method/) on Platform version 3.0 in different modules using the instance methods - `client.instance.resize()`, `client.instance.close()`, `client.instance.context()`, `client.instance.send()`, `client.instance.receive()`, `client.instance.get()`.
 
 | Module | Works in Product |
 | ----- | ------- |
