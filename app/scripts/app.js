@@ -1,76 +1,81 @@
-window.frsh_init().then(function (client) {
-  window.client = client;
-  // Instance APIs to resize the app real estate available
-  // Increasing the height value is supported however width is fixed for this placeholder
-  // To use bigger app real estate explore other placeholder options 
-  const showModalBtn = document.querySelector('#showModal');
-  const showDialogBtn = document.querySelector('#showDialog');
+(function () {
+  const HEALTH_SCORES = {
+    healthy: { label: 'Healthy', color: 'green', score: 92 },
+    at_risk: { label: 'At Risk', color: 'yellow', score: 64 },
+    critical: { label: 'Critical', color: 'red', score: 38 }
+  };
 
-  showModalBtn.addEventListener('fwClick', showModal())
-  showModalBtn.addEventListener('fwClick', showDialog())
-
-  try {
-    client.instance.resize({ height: "400px" });
-  } catch (error) {
-    console.error(error);
-  }
-
-
-  // current instance details
-  try {
-    client.instance.context().then(function (context) {
-
-      // receive message from other instances
-      client.instance.receive(function (e) {
-        let data = e.helper.getData();
-        console.log(`${context.instance_id}: Received message from ${JSON.stringify(data.sender)}: Message: `, data.message);
-      });
-
-      console.log('instance API context', context);
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-function showModal() {
-  try {
+  function showModal() {
     client.interface.trigger('showModal', {
-      title: 'Sample App Form',
+      title: 'TechCorp — Account Health Review',
       template: 'modal.html',
       data: {
-        defaultName: 'test',
-        defaultEmail: 'test@email.com'
+        defaultName: 'Acme Corp',
+        defaultEmail: 'csm@acmecorp.com'
       }
-    })
-      .then(
-        function (data) {
-          console.log('Parent:InterfaceAPI:showModal', data);
-        },
-        function (error) {
-          console.log('Parent:InterfaceAPI:showModal', error);
-        }
-      );
-  } catch (error) {
-    console.error(error)
+    }).then(function (data) {
+      console.info('Modal closed', data);
+    }).catch(function (error) {
+      console.error('Modal error', error);
+    });
   }
-}
 
-function showDialog() {
-  try {
+  function showDialog() {
     client.interface.trigger('showDialog', {
-      title: 'Sample Dialog',
+      title: 'Escalation note',
       template: 'modal.html'
-    })
-      .then(
-        function (data) {
-          console.log('Parent:InterfaceAPI:showDialog', data);
-        },
-        function (error) {
-          console.log('Parent:InterfaceAPI:showDialog', error);
-        }
-      );
-  } catch (error) {
-    console.error(error)
+    }).then(function (data) {
+      console.info('Dialog closed', data);
+    }).catch(function (error) {
+      console.error('Dialog error', error);
+    });
   }
-}
+
+  function renderHealthBadge(tier) {
+    const info = HEALTH_SCORES[tier] || HEALTH_SCORES.at_risk;
+    const badge = document.getElementById('healthBadge');
+    if (badge) {
+      badge.setAttribute('color', info.color);
+      badge.setAttribute('value', `${info.label} · ${info.score}`);
+    }
+  }
+
+  function onAppActivate() {
+    renderHealthBadge('at_risk');
+
+    const showModalBtn = document.querySelector('#showModal');
+    const showDialogBtn = document.querySelector('#showDialog');
+    if (showModalBtn) {
+      showModalBtn.addEventListener('fwClick', showModal);
+    }
+    if (showDialogBtn) {
+      showDialogBtn.addEventListener('fwClick', showDialog);
+    }
+
+    try {
+      client.instance.resize({ height: '400px' });
+    } catch (error) {
+      console.error(error);
+    }
+
+    client.instance.context().then(function (context) {
+      client.instance.receive(function (event) {
+        const data = event.helper.getData();
+        console.info(
+          `${context.instance_id}: Health update from ${JSON.stringify(data.sender)}`,
+          data.message
+        );
+        if (data.message && data.message.healthTier) {
+          renderHealthBadge(data.message.healthTier);
+        }
+      });
+    }).catch(function (error) {
+      console.error(error);
+    });
+  }
+
+  app.initialized().then(function (_client) {
+    window.client = _client;
+    client.events.on('app.activated', onAppActivate);
+  }).catch(console.error);
+})();

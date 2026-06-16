@@ -1,16 +1,22 @@
 <html>
-<script src="{{{appclient}}}"></script>
-<script src="app.js"></script>
-<script async type="module"
-  src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.esm.js"></script>
-<script async nomodule src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.js"></script>
-
+<head>
+  <script src="{{{appclient}}}"></script>
+  <script async type="module"
+    src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.esm.js"></script>
+  <script async nomodule
+    src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles/style.css" />
+</head>
 <body>
   <div class="container">
-    <h4>Instance API demo</h4>
-    <fw-button id="showModal">Show modal</fw-button>
-    <fw-button id="showDialog">Show dialog</fw-button>
+    <h4>TechCorp Customer Health</h4>
+    <p class="subtitle">B2B account health at a glance in the ticket sidebar.</p>
+    <fw-label id="healthBadge" color="yellow" value="At Risk · 64"></fw-label>
+    <div class="actions">
+      <fw-button id="showModal" color="primary">Open health review</fw-button>
+      <fw-button id="showDialog" color="secondary">Add escalation note</fw-button>
+    </div>
   </div>
+  <script src="scripts/app.js"></script>
 </body>
-
 </html>

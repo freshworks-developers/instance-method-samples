@@ -1,47 +1,51 @@
 <html>
-<script src="{{{appclient}}}"></script>
-<script async type="module"
-  src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.esm.js"></script>
-<script async nomodule src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.js"></script>
-
+<head>
+  <script src="{{{appclient}}}"></script>
+  <script async type="module"
+    src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.esm.js"></script>
+  <script async nomodule
+    src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.js"></script>
+</head>
 <body>
   <div id="static-form-container">
+    <h5>Update health assessment</h5>
     <fw-form id="fw-static-form">
-      <fw-form-control type="TEXT" name="first_name" placeholder="First Name" required label="First Name"
-        id="first_name"></fw-form-control>
-      <fw-form-control type="TEXT" name="last_name" placeholder="Last Name" required label="Last Name"
-        id="last_name"></fw-form-control>
-      <fw-textarea rows=5 label="Message" name="message" required></fw-textarea>
+      <fw-form-control type="TEXT" name="account_name" label="Account" required></fw-form-control>
+      <fw-form-control type="TEXT" name="csm_email" label="CSM email" required></fw-form-control>
+      <fw-select label="Health tier" name="healthTier" required>
+        <fw-select-option value="healthy">Healthy</fw-select-option>
+        <fw-select-option value="at_risk">At Risk</fw-select-option>
+        <fw-select-option value="critical">Critical</fw-select-option>
+      </fw-select>
+      <fw-textarea rows="4" label="Notes" name="notes" required></fw-textarea>
     </fw-form>
-    <fw-button id="submit-static-form">Submit</fw-button>
+    <fw-button id="submit-static-form" color="primary">Save & notify parent</fw-button>
     <fw-button id="reset-static-form">Reset</fw-button>
   </div>
-
   <script type="application/javascript">
-    var formStatic = document.querySelector("#fw-static-form")
-    document.querySelector('#submit-static-form').addEventListener('click', async (e) => {
-      const { values } = await formStatic.doSubmit(e);
-      console.log({ values });
-      window.frsh_init().then(function (client) {
-
-        client.instance.resize({ height: "500px" });
-
-        // Send message to parent
-        client.instance.send({ message: values });
-
-        // Close the instance
-        client.instance.close();
+    (function () {
+      const formStatic = document.querySelector('#fw-static-form');
+      document.querySelector('#submit-static-form').addEventListener('fwClick', function (e) {
+        formStatic.doSubmit(e).then(function (result) {
+          const values = result.values;
+          app.initialized().then(function (childClient) {
+            childClient.instance.resize({ height: '500px' });
+            childClient.instance.send({
+              message: {
+                healthTier: values.healthTier,
+                notes: values.notes,
+                account: values.account_name
+              }
+            });
+            childClient.instance.close();
+          });
+        });
+        e.preventDefault();
       });
-
-      // To prevent from reloading after form submit
-      event.preventDefault();
-
-    });
-    document.querySelector('#reset-static-form').addEventListener('click', (e) => {
-      formStatic.doReset(e);
-    });
-
+      document.querySelector('#reset-static-form').addEventListener('fwClick', function (e) {
+        formStatic.doReset(e);
+      });
+    })();
   </script>
 </body>
-
 </html>

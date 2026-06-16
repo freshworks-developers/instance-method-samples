@@ -1,5 +1,9 @@
 {
   "platform-version": "3.0",
+  "app": {
+    "tracking_id": "techcorphealthscore01",
+    "start_time": "2026-06-04T09:00:00.000Z"
+  },
   "modules": {
     "common": {
       "location": {
@@ -7,8 +11,7 @@
           "url": "index.html",
           "icon": "styles/images/icon.svg"
         }
-      },
-      "requests": {}
+      }
     },
     "support_ticket": {
       "location": {
@@ -44,7 +47,7 @@
     }
   },
   "engines": {
-    "node": "18.13.0",
-    "fdk": "9.1.0"
+    "node": "24.11.1",
+    "fdk": "10.1.2"
   }
 }
